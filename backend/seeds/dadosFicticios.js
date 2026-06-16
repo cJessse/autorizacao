@@ -6,11 +6,16 @@ import Autorizacao from '../models/Autorizacao.js';
 import bcrypt from 'bcryptjs';
 import '../models/relacionamentos.js';
 
-async function seed() {
+export async function seed(forceSync = true) {
     try {
         console.log('Conectando ao banco de dados...');
-        await banco.sync({ force: true });
-        console.log('Banco de dados sincronizado.');
+        if (forceSync) {
+            await banco.sync({ force: true });
+            console.log('Banco de dados sincronizado (force: true).');
+        } else {
+            await banco.sync();
+            console.log('Banco de dados sincronizado.');
+        }
 
         console.log('Inserindo pacientes (mock G1)...');
         const pacientes = await Paciente.bulkCreate([
@@ -179,11 +184,15 @@ async function seed() {
         console.log(`${autorizacoes.length} autorizações inseridas.`);
 
         console.log('Seed concluído com sucesso!');
-        process.exit(0);
     } catch (error) {
         console.error('Erro durante o seed:', error);
-        process.exit(1);
+        throw error;
     }
 }
 
-seed();
+// Se executado diretamente pela linha de comando
+if (process.argv[1] && (process.argv[1].endsWith('dadosFicticios.js') || process.argv[1].endsWith('seed'))) {
+    seed(true)
+        .then(() => process.exit(0))
+        .catch(() => process.exit(1));
+}

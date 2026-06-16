@@ -6,11 +6,21 @@ import integracao from "./controllers/IntegracaoController.js";
 import auth from "./controllers/AuthController.js";
 import { authMiddleware, adminMiddleware } from "./middlewares/authMiddleware.js";
 import "./models/relacionamentos.js";
+import { seed } from "./seeds/dadosFicticios.js";
+import Convenio from "./models/Convenio.js";
 
 try {
     await banco.authenticate();
     await banco.sync();
     console.log('Banco de dados conectado e sincronizado com sucesso.');
+    
+    // Auto-seed se o banco de dados estiver vazio (essencial para deploy no Render Free Tier)
+    const conveniosCount = await Convenio.count();
+    if (conveniosCount === 0) {
+        console.log('Banco de dados vazio detectado. Iniciando seed automático...');
+        await seed(false); // Executa o seed sem recriar as tabelas
+        console.log('Seed automático concluído com sucesso.');
+    }
 } catch (error) {
     console.error('Erro ao conectar ou sincronizar com o banco de dados:', error);
 }
