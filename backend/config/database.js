@@ -21,7 +21,7 @@ const banco = process.env.DATABASE_URL
         host: 'localhost',
         port: 5434,
         database: 'autorizacao_db',
-        username: 'postgres',
+        username: 'admin',
         password: 'postgres',
         define: {
             timestamps: true,
