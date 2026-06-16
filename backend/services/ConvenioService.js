@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Convenio from '../models/Convenio.js';
 
-const API_G9_URL = 'http://localhost:3009/api/convenio';
+const API_G9_URL = process.env.API_G9_URL || 'http://localhost:3009/api/convenio';
 const CACHE_TTL = 3600000; // 1 hora
 
 class ConvenioService {

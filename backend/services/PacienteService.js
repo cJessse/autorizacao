@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Paciente from '../models/Paciente.js';
 
-const API_G1_URL = 'https://pacientes-1a6g.onrender.com/paciente';
+const API_G1_URL = process.env.API_G1_URL || 'https://pacientes-1a6g.onrender.com/paciente';
 const CACHE_TTL = 1800000; // 30 minutos
 
 class PacienteService {
