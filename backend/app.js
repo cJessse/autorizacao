@@ -9,8 +9,10 @@ import "./models/relacionamentos.js";
 
 try {
     await banco.authenticate();
+    await banco.sync();
+    console.log('Banco de dados conectado e sincronizado com sucesso.');
 } catch (error) {
-    console.error('Erro ao conectar com o banco de dados:', error);
+    console.error('Erro ao conectar ou sincronizar com o banco de dados:', error);
 }
 
 const api = Express();
