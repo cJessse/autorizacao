@@ -19,6 +19,17 @@ const api = Express();
 api.use(cors());
 api.use(Express.json());
 
+api.get('/', (req, res) => {
+    res.json({
+        message: 'API G13 - Autorização de Procedimentos Médicos funcionando',
+        status: 'UP',
+        endpoints: {
+            health: '/api/health',
+            teste: '/teste'
+        }
+    });
+});
+
 api.get('/teste', (req, res) => {
     res.send('API G13 - Autorização funcionando');
 });
