@@ -28,9 +28,18 @@ class PacienteService {
     }
 
     async callApiWithRetry(endpoint, retries = 3, delay = 1000) {
+        const token = process.env.API_G1_TOKEN || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoidXN1YXJpbyIsImlhdCI6MTc4MTY1MTM4MSwiZXhwIjoxNzgxNjgwMTgxfQ.5Ou-f0iCJrGtrTBWcp4oKIs9RkFBwcHvH-4quPI9lNI';
+        const headers = {};
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+        }
+
         for (let i = 0; i < retries; i++) {
             try {
-                const response = await axios.get(endpoint, { timeout: 5000 });
+                const response = await axios.get(endpoint, { 
+                    headers,
+                    timeout: 5000 
+                });
                 return response.data;
             } catch (error) {
                 if (i === retries - 1) throw error;

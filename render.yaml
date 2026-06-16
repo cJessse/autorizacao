@@ -22,6 +22,8 @@ services:
         value: production
       - key: API_G1_URL
         value: https://pacientes-1a6g.onrender.com/paciente
+      - key: API_G1_TOKEN
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoidXN1YXJpbyIsImlhdCI6MTc4MTY1MTM4MSwiZXhwIjoxNzgxNjgwMTgxfQ.5Ou-f0iCJrGtrTBWcp4oKIs9RkFBwcHvH-4quPI9lNI
 
   # Frontend Web App (Static Site)
   - type: web
