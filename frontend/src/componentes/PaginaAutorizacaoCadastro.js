@@ -91,18 +91,33 @@ function PaginaAutorizacaoCadastro() {
         e.preventDefault();
         
         if (!formData.idpaciente || !formData.idconvenio || !formData.codigo_procedimento || 
-            !formData.descricao_procedimento || !formData.medico_solicitante || !formData.crm_medico) {
-            alert('Preencha todos os campos obrigatórios');
+            !formData.descricao_procedimento || !formData.medico_solicitante || !formData.crm_medico ||
+            !formData.valor_estimado) {
+            alert('Preencha todos os campos obrigatórios (incluindo o Valor Estimado)');
             return;
         }
+
+        const crmRegex = /^\d+-[A-Z]{2}$/;
+        if (!crmRegex.test(formData.crm_medico)) {
+            alert('CRM inválido. O formato deve ser número seguido de hífen e duas letras da UF (Exemplo: 12345-SP)');
+            return;
+        }
+
+        const payload = {
+            ...formData,
+            idpaciente: Number(formData.idpaciente),
+            idconvenio: Number(formData.idconvenio),
+            valor_estimado: parseFloat(formData.valor_estimado),
+            data_prevista: formData.data_prevista || null
+        };
 
         try {
             setLoading(true);
             if (id) {
-                await api.put(`/autorizacao/${id}`, formData);
+                await api.put(`/autorizacao/${id}`, payload);
                 alert('Autorização atualizada com sucesso!');
             } else {
-                await api.post('/autorizacao', formData);
+                await api.post('/autorizacao', payload);
                 alert('Autorização criada com sucesso!');
             }
             navigate('/');
@@ -130,6 +145,7 @@ function PaginaAutorizacaoCadastro() {
                             onChange={handleChange}
                             style={styles.input}
                             required
+                            disabled={!!id}
                         >
                             <option value="">Selecione...</option>
                             {pacientes.map(p => (
@@ -146,6 +162,7 @@ function PaginaAutorizacaoCadastro() {
                             onChange={handleChange}
                             style={styles.input}
                             required
+                            disabled={!!id}
                         >
                             <option value="">Selecione...</option>
                             {convenios.map(c => (
@@ -207,7 +224,7 @@ function PaginaAutorizacaoCadastro() {
                     </div>
 
                     <div style={styles.field}>
-                        <label style={styles.label}>Valor Estimado (R$)</label>
+                        <label style={styles.label}>Valor Estimado (R$) *</label>
                         <input
                             type="number"
                             name="valor_estimado"
@@ -216,6 +233,7 @@ function PaginaAutorizacaoCadastro() {
                             style={styles.input}
                             step="0.01"
                             min="0"
+                            required
                         />
                     </div>
                 </div>

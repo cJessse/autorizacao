@@ -136,7 +136,7 @@ function PaginaAutorizacaoLista() {
                 {autorizacoes.map((aut) => (
                     <div key={aut.idautorizacao} style={styles.card}>
                         <div style={styles.cardHeader}>
-                            <h3 style={styles.cardTitle}>Protocolo:</h3>
+                            <h3 style={styles.cardTitle}>Protocolo: {aut.numero_protocolo}</h3>
                             <div style={{...styles.statusBadge, backgroundColor: getStatusColor(aut.status)}}>
                                 {aut.status}
                             </div>

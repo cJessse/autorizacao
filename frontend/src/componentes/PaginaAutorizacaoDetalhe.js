@@ -43,6 +43,11 @@ function PaginaAutorizacaoDetalhe() {
             return;
         }
 
+        if (!decisaoForm.decisao_motivo || decisaoForm.decisao_motivo.trim() === '') {
+            alert('O motivo da decisão é obrigatório');
+            return;
+        }
+
         try {
             await api.put(`/autorizacao/${id}/decisao`, decisaoForm);
             alert('Decisão registrada com sucesso!');
@@ -66,6 +71,21 @@ function PaginaAutorizacaoDetalhe() {
         } catch (error) {
             console.error('Erro ao processar decisão:', error);
             alert('Erro ao processar decisão');
+        }
+    };
+
+    const excluirAutorizacao = async () => {
+        if (!window.confirm('Deseja realmente excluir esta autorização?')) {
+            return;
+        }
+
+        try {
+            await api.delete(`/autorizacao/${id}`);
+            alert('Autorização excluída com sucesso!');
+            navigate('/');
+        } catch (error) {
+            console.error('Erro ao excluir autorização:', error);
+            alert('Erro ao excluir autorização: ' + (error.response?.data?.error || error.message));
         }
     };
 
@@ -164,6 +184,12 @@ function PaginaAutorizacaoDetalhe() {
                         >
                             Editar
                         </Link>
+                        <button 
+                            onClick={excluirAutorizacao}
+                            style={styles.deleteButton}
+                        >
+                            Excluir
+                        </button>
                     </div>
                 )}
 
@@ -186,12 +212,13 @@ function PaginaAutorizacaoDetalhe() {
                                 </select>
                             </div>
                             <div style={styles.field}>
-                                <label style={styles.label}>Motivo</label>
+                                <label style={styles.label}>Motivo *</label>
                                 <textarea
                                     name="decisao_motivo"
                                     value={decisaoForm.decisao_motivo}
                                     onChange={handleDecisaoChange}
                                     style={styles.textarea}
+                                    required
                                 />
                             </div>
                             <div style={styles.formActions}>
@@ -291,6 +318,15 @@ const styles = {
         textDecoration: 'none',
         padding: '0.75rem 1.5rem',
         borderRadius: '4px',
+        fontSize: '1rem'
+    },
+    deleteButton: {
+        backgroundColor: '#e74c3c',
+        color: 'white',
+        border: 'none',
+        padding: '0.75rem 1.5rem',
+        borderRadius: '4px',
+        cursor: 'pointer',
         fontSize: '1rem'
     },
     decisaoForm: {
